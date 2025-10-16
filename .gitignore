@@ -1,0 +1,20 @@
+# Ignore system files
+.DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Ignore logs and temporary files
+src/models/pong_dqn_right_best.weights.h5
+
+# Environment files
+.env
+.venv/
+env/
+venv/
+*.env
+
+# Logs
+*.log
