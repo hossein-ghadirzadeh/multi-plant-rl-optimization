@@ -5,7 +5,8 @@ from tensorflow.keras import layers
 class QNetwork(tf.keras.Model):
     def __init__(self, state_size, action_size):
         super(QNetwork, self).__init__()
-        self.hidden_layer1 = layers.Dense(64, activation='relu', input_shape=(state_size,))
+        # Do not set input_shape here; let the first call build weights.
+        self.hidden_layer1 = layers.Dense(64, activation='relu')
         self.hidden_layer2 = layers.Dense(128, activation='relu')
         self.output_layer = layers.Dense(action_size, activation='linear')
 
