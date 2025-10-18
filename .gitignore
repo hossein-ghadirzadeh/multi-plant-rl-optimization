@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # Ignore logs and temporary files
-src/models/pong_dqn_right_best.weights.h5
+src/models/pong*
 
 # Environment files
 .env
