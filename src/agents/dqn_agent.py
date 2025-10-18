@@ -35,10 +35,10 @@ class DQNAgent:
         self.t_step = 0
         self.global_steps = 0
 
-        # build networks
+        # Build networks by calling with a dummy state
         dummy = np.zeros((1, state_size), dtype=np.float32)
-        _ = self.main_Qnetwork(dummy)
-        _ = self.target_Qnetwork(dummy)
+        self.main_Qnetwork(dummy)
+        self.target_Qnetwork(dummy)
         self.update_target_network()
 
     def update_target_network(self):
@@ -71,6 +71,7 @@ class DQNAgent:
         rewards_tf = tf.convert_to_tensor(rewards, dtype=tf.float32)
         dones_tf = tf.convert_to_tensor(dones, dtype=tf.float32)
 
+        # Standard DQN target (you can substitute Double-DQN here if desired)
         next_q = self.target_Qnetwork(next_states_tf)
         max_next_q = tf.reduce_max(next_q, axis=1)
         q_targets = rewards_tf + self.discount_factor * max_next_q * (1.0 - dones_tf)

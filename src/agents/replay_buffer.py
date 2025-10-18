@@ -12,7 +12,8 @@ class ReplayBuffer:
             self.buffer.append(events)
         else:
             self.buffer[self.position] = events
-        self.position = (self.position + 1) % self.buffer_size
+            self.position = (self.position + 1) % self.buffer_size
+        # If buffer still filling, we don't move position beyond appended items.
 
     def sample(self, batch_size):
         experiences = random.sample(self.buffer, batch_size)
