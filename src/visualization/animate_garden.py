@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import random
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PLOTS_DIR = PROJECT_ROOT / "plots"
 
 
 def animate_garden(env, q_early, q_late, pg_early, pg_late,
@@ -126,12 +130,14 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
 
     # ---------- Optional Save ----------
     if save_path:
-        print(f" Saving animation to: {save_path} ...")
+        full_save_path = PLOTS_DIR / save_path
+        PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+        print(f" Saving animation to: {full_save_path} ...")
         try:
             if save_path.lower().endswith(".gif"):
-                ani.save(save_path, writer="pillow", fps=fps)
+                ani.save(full_save_path, writer="pillow", fps=fps)
             elif save_path.lower().endswith((".mp4", ".mov", ".avi")):
-                ani.save(save_path, writer="ffmpeg", fps=fps)
+                ani.save(full_save_path, writer="ffmpeg", fps=fps)
             else:
                 print("unsupported file format. Use .gif or .mp4")
                 return

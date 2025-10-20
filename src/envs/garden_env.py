@@ -1,9 +1,11 @@
 import numpy as np
 import random
 
+from config import NUM_PLANTS, MAX_PLANT_HEIGHT, MAX_WATER_RESOURCES
+
 # environment that simulates a garden with multiple plants
 class MultiPlantGardenEnv:
-    def __init__(self, num_plants=5, max_height=10, max_water=12):
+    def __init__(self, num_plants=NUM_PLANTS, max_height=MAX_PLANT_HEIGHT, max_water=MAX_WATER_RESOURCES):
         self.num_plants = num_plants
         self.max_height = max_height
         self.max_water = max_water

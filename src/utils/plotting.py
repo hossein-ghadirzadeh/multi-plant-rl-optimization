@@ -1,14 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 from pathlib import Path
 
+from config import PLOT_SMOOTHING_WINDOW
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PLOTS_DIR = PROJECT_ROOT / "plots"
 
 
-def smooth(x, n=50):
+def smooth(x, n=PLOT_SMOOTHING_WINDOW):
     # smooth the rewards by using a moving average
     return np.convolve(x, np.ones(n)/n, mode="valid")
 
@@ -29,6 +29,8 @@ def plot_rewards(rewards_q, rewards_pg, num_plants=5, save_path=None):
 
     if save_path is None:
         save_path = PLOTS_DIR / f"plot_{num_plants}plants.png"
+
+    save_path.parent.mkdir(parents=True, exist_ok=True)
 
     plt.savefig(save_path, dpi=300) # save plot to file
     print(f"Saved reward plot to: {save_path}")
