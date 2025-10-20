@@ -88,6 +88,8 @@ After a successful run, the following outputs will be generated:
 1.  **Learning Curve Plot**: An image file named `plot_<N>plants.png` will be saved in the `src/plots/` directory, comparing the learning progress of the two agents.
 2.  **Comparative Animation**: A video file (or GIF) named `garden_growth_<N>.gif` will be created in the `src/plots/` directory, visually demonstrating the agents' behavior at the start and end of training.
 
+---
+
 ### Authors and Contact
 
 This project was created by a team of students from Jönköping University's School of Engineering (JTH) for the Reinforcement Learning Course (TFSS25).
@@ -101,7 +103,5 @@ For questions, feedback, or collaborations, please feel free to reach out to any
 | **Koray Duzgun**        | `duko23hj@student.ju.se` |
 | **Mohamad Alkhaled**    | `almo24jy@student.ju.se` |
 
-<br>
-
-**Jönköping University, School of Engineering (JTH)**
+**Jönköping University, School of Engineering (JTH)**<br>
 _October 2025_
