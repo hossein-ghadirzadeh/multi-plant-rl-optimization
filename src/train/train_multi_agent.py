@@ -12,7 +12,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))
 
 from envs.pong_env import PongEnv
-from agents.q_agent import QLearningAgent
+from agents.q_learning_agent import QLearningAgent
 from agents.dqn_agent import DQNAgent
 from evaluation.eval_arena import evaluate
 from evaluation.watch import watch_agent_play
