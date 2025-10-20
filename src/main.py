@@ -8,7 +8,7 @@ from visualization.animate_garden import animate_garden
 
 
 def main():
-    # Initialize environments and agents
+    # initialize environments and agents
     env_q = MultiPlantGardenEnv(num_plants=12)
     env_pg = MultiPlantGardenEnv(num_plants=12)
     q_agent = SimpleQLearningAgent(env_q)
@@ -24,7 +24,7 @@ def main():
         rewards_pg,
         num_plants=env_q.num_plants
     )
-    # Compute average growth patterns and stats
+    # Compute average growth patterns and stats for both agents
     q_early_stats = avg_growth(growth["Q_first"])
     q_late_stats = avg_growth(growth["Q_last"])
     pg_early_stats = avg_growth(growth["PG_first"])
