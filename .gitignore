@@ -6,9 +6,6 @@ __pycache__/
 *.py[cod]
 *.so
 
-# Ignore logs and temporary files
-src/models/pong*
-
 # Environment files
 .env
 .venv/
