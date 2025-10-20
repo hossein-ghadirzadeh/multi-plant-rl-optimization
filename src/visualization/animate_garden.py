@@ -7,40 +7,20 @@ import random
 def animate_garden(env, q_early, q_late, pg_early, pg_late,
                    q_early_stats, q_late_stats, pg_early_stats, pg_late_stats,
                    save_path=None, fps=5):
-    """
-    Create 4-panel animation comparing early/late behavior of Q-learning & Policy Gradient,
-    with keyboard controls and optional saving.
-
-    Controls:
-        Spacebar → Pause / Resume
-        Right arrow → Step forward one frame
-        Left arrow → Step backward one frame
-
-    Parameters
-    ----------
-    env : MultiPlantGardenEnv
-        Environment object used for context.
-    q_early, q_late, pg_early, pg_late : np.ndarray
-        Average plant growth data.
-    *_stats : tuple
-        Stats for each stage (data, avg_len, alive fraction).
-    save_path : str or None, optional
-        If provided, animation will be saved to this path (e.g., "garden.mp4" or "garden.gif").
-    fps : int, optional
-        Frames per second when saving video. Default is 5.
-    """
+   # create figure and 2x2 grid for animations
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
     fig.patch.set_facecolor("#e8f7ff")
 
-    titles = [
-        f"🌱 Q‑Learning Early — AvgLen {q_early_stats[1]:.2f} | Alive {q_early_stats[2]*100:.0f}%",
-        f"🌷 Q‑Learning Late — AvgLen {q_late_stats[1]:.2f} | Alive {q_late_stats[2]*100:.0f}%",
-        f"🌱 PG Early — AvgLen {pg_early_stats[1]:.2f} | Alive {pg_early_stats[2]*100:.0f}%",
-        f"🌸 PG Late — AvgLen {pg_late_stats[1]:.2f} | Alive {pg_late_stats[2]*100:.0f}%"
+    titles = [   # titles for each subplot with growth stats
+        f"Q-Learning Early — AvgLen{q_early_stats[1]:.2f} | Alive{q_early_stats[2]*100:.0f}%",
+        f"Q-Learning Late — AvgLen{q_late_stats[1]:.2f} | Alive{q_late_stats[2]*100:.0f}%",
+        f"PG Early — AvgLen{pg_early_stats[1]:.2f} | Alive{pg_early_stats[2]*100:.0f}%",
+        f"PG Late — AvgLen{pg_late_stats[1]:.2f} |Alive{pg_late_stats[2]*100:.0f}%"
     ]
-    datasets = [q_early, q_late, pg_early, pg_late]
-    x_spacing, y_base = 1.2, 0.4
-    flower_colors = ["gold", "violet", "deeppink", "orange", "lightcoral"]
+
+    datasets = [q_early, q_late, pg_early, pg_late] # data for each panel
+    x_spacing, y_base = 1.2, 0.4  # spacing for plants
+    flower_colors = ["gold", "violet", "deeppink", "orange", "lightcoral"]  
 
     plots, flowers, texts, grounds = [], [], [], []
     for ax, title in zip(axes.flat, titles):
@@ -52,6 +32,7 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
         ax.set_title(title, fontsize=11, weight="bold", color="#2c3e50")
         ax.axis("off")
 
+      # create plant stems and flower markers
         stems, blooms = [], []
         for i in range(env.num_plants):
             s, = ax.plot([], [], lw=3, color="darkgreen", alpha=0.9)
@@ -72,6 +53,7 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
     current_frame = [0]
     paused = [False]
 
+   # initialize the animation 
     def init():
         elements = []
         for s_list, f_list, t in zip(plots, flowers, texts):
@@ -81,14 +63,15 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
             t.set_text("")
             elements += s_list + f_list + [t]
         return elements
-
+    
+    # draw each frame of the animation
     def draw_frame(frame):
         elements = []
         shimmer = 0.01 * np.sin(frame / 8.0)
         for (data, s_list, f_list, t, ground) in zip(datasets, plots, flowers, texts, grounds):
             step = min(frame, len(data) - 1)
             heights = data[step]
-
+            # update stem height and color based on plant growth
             for i, h in enumerate(heights):
                 x = 0.6 + i * x_spacing
                 s_list[i].set_data([x, x], [y_base, y_base + h])
@@ -110,7 +93,8 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
                 f"Step {step+1}/{max_frames} — Alive {alive}/{env.num_plants} | Avg {avg_len:.2f}")
             elements += s_list + f_list + [t, ground]
         return elements
-
+    
+   # update frame 
     def update(_):
         if not paused[0]:
             current_frame[0] = (current_frame[0] + 1) % max_frames
@@ -120,40 +104,40 @@ def animate_garden(env, q_early, q_late, pg_early, pg_late,
     def on_key(event):
         if event.key == " ":
             paused[0] = not paused[0]
-            print("⏸️ Paused" if paused[0] else "▶️ Resumed")
+            print("Paused" if paused[0] else "Resumed")
         elif event.key == "right":
             paused[0] = True
             current_frame[0] = min(current_frame[0] + 1, max_frames - 1)
-            print(f"➡️ Frame {current_frame[0]+1}")
+            print(f"Frame {current_frame[0]+1}")
             draw_frame(current_frame[0])
             fig.canvas.draw_idle()
         elif event.key == "left":
             paused[0] = True
             current_frame[0] = max(current_frame[0] - 1, 0)
-            print(f"⬅️ Frame {current_frame[0]+1}")
+            print(f"Frame {current_frame[0]+1}")
             draw_frame(current_frame[0])
             fig.canvas.draw_idle()
 
     fig.canvas.mpl_connect("key_press_event", on_key)
-
+    # create animation
     ani = animation.FuncAnimation(
         fig, update, init_func=init, frames=max_frames, interval=300, blit=True, repeat=False
     )
 
     # ---------- Optional Save ----------
     if save_path:
-        print(f"💾 Saving animation to: {save_path} ...")
+        print(f" Saving animation to: {save_path} ...")
         try:
             if save_path.lower().endswith(".gif"):
                 ani.save(save_path, writer="pillow", fps=fps)
             elif save_path.lower().endswith((".mp4", ".mov", ".avi")):
                 ani.save(save_path, writer="ffmpeg", fps=fps)
             else:
-                print("Unsupported file format. Use .gif or .mp4")
+                print("unsupported file format. Use .gif or .mp4")
                 return
-            print("Animation saved successfully!")
+            print("animation saved successfully!")
         except Exception as e:
-            print(f"Error during saving: {e}")
+            print(f"error during saving: {e}")
 
     plt.tight_layout()
     plt.show()

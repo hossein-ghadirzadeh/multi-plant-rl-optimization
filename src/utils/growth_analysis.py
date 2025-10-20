@@ -8,6 +8,7 @@ def avg_growth(episodes):
         padded = np.array(
             [np.pad(e, ((0, max_len-len(e)), (0, 0)), mode='edge')])[0]
         arr.append(padded)
+    # compute average plant height over all episodes
     data = np.mean(arr, axis=0)
     avg_len = np.mean(data)
     alive = np.mean([(np.count_nonzero(h > 0.5)/len(h)) for h in data])
